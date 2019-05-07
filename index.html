@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>4W Sulawesi Earthquake and Tsunami</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="style.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
+	
+
+   <style>
+		html, body {
+			height: 100%;
+			margin: 'centre';
+		}
+		#map { width: 90%; height: 70%;}
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+	.imagepopup{
+		width: 350px;
+	}
+	</style>
+
+
+</head>
+<body>
+
+	<!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+      <h3 class="my-0 mr-md-auto font-weight-bold">Cyclone Idai - Aerial Assessment Image</h3>
+	</div>
+    <!-- END HEADER -->
+	
+	<!-- START Page Content -->
+    <div class="container-fluid" id='maincontainer'>
+	    	<div class="col-md-12 apanel">
+	    		<div class="row">
+	    			<div class="col-md-12">
+	    				<div id='region_div'></div>
+	    			</div>
+	    		</div>	
+	    	</div>
+	</div>
+    <!-- END Page Content -->
+
+    <!-- JAVASCRIPT LIBRARY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+
+
+
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+    		// INITIAL VARIABLE
+    		var thedata,
+    			theDataTableInit = 0,
+    			human_number = d3.format(",d"),
+    			SelectedRegion = 'District',
+    			statesData = 0,
+    			locationCount=[],
+    			zero = 0;
+
+			var geojson;
+			var map = L.map('region_div').setView([-12.2199412913500303, 39.97706775665284], 9);
+			var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 17,
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			});
+
+			OpenStreetMap_Mapnik.addTo(map); 
+
+			function drawboundaries(){
+				d3.json('moz_adm3.geojson',function(jso){	
+	    			// var statesData = jso;
+	    			// get color depending on population density value
+					function style(feature) {
+						return {
+							weight: 2,
+							opacity: 1,
+							color: 'blue',
+							fillColor: 'red',
+							className: 'countriesboundaries'
+						};
+					}
+					var geojson;
+					geojson = L.geoJson(jso, {
+						style: style,
+					}).addTo(map);
+	    		})
+	    		d3.json('data/point_pics.geojson',function(data){
+	    			data.features.forEach(function(d,i){
+	    				var circle = L.marker([d.geometry.coordinates[1],d.geometry.coordinates[0]],{
+							className:'test'
+						}).addTo(map).bindPopup('<div class="imagepopup"></div>').on('click',function(){
+							$('.imagepopup').html(d.properties.description);
+						});
+	    			})
+	    		})
+			}  	
+			drawboundaries();
+
+			// function to draw the map
+    		function drawregiondiv(){
+    			
+    			// control that shows state info on hover
+				var info = L.control();
+
+				info.onAdd = function (map) {
+					this._div = L.DomUtil.create('div', 'info');
+					this.update();
+					return this._div;
+				};
+
+
+				info.addTo(map);
+
+				geojson = L.geoJson(statesData, {
+					style: style,
+					onEachFeature: onEachFeature
+				}).addTo(map);
+
+				map.attributionControl.addAttribution('Impact data &copy; Compile by BNPB');
+
+
+				var legend = L.control({position: 'bottomright'});
+
+				legend.onAdd = function (map) {
+
+					var div = L.DomUtil.create('div', 'info legend'),
+						grades = [500, 750, 1000, 5000, 10000	],
+						labels = [],
+						from, to;
+
+					for (var i = 0; i < grades.length; i++) {
+						from = grades[i];
+						to = grades[i + 1];
+
+						labels.push(
+							'<i style="background:' + getColor(from + 1) + '"></i> ' +
+							from + (to ? '&ndash;' + to : '+'));
+					}
+
+					div.innerHTML = labels.join('<br>');
+					return div;
+				};
+
+				legend.addTo(map);
+	    	}
+	  //   	}
+
+	    		// call the original data
+	  //   		// d3.csv('paluimpact.csv',function(data){
+		 //    	// 	//set the data called to variable thedata
+		 //    	// 	// console.log(data);
+		 //    		thedata = data;
+
+		    
+
+		    
+
+		    	//})	 
+
+			//});
+
+	    })
+	    	
+	</script>
+
+</body>
+</html>
