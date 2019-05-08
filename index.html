@@ -90,12 +90,18 @@
 
 			var geojson;
 			var map = L.map('region_div').setView([-12.2199412913500303, 39.97706775665284], 9);
-			var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				maxZoom: 17,
-				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			var map = L.map('region_div').setView([-12.2199412913500303, 39.97706775665284], 9);
+			var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+				attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	
+			// var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			// 	maxZoom: 17,
+			// 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			});
 
-			OpenStreetMap_Mapnik.addTo(map); 
+			//OpenStreetMap_Mapnik.addTo(map); 
+	
+			Esri_WorldImagery.addTo(map);
 
 			function drawboundaries(){
 	    		d3.json('data/point_pics.geojson',function(data){
