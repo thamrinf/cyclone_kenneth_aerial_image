@@ -20,6 +20,15 @@ h1,h2,h3,h4,h5{
 	color: #212121;
 
 }
+.imagepopup img{
+ width: 300px;
+ height: auto;
+ background-size: contain;
+}
+.info{
+ width: 400px;
+ height: auto;
+}
 #maincontainer{
 	margin-top: 0px;
 	padding: 0px 30px;

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>4W Sulawesi Earthquake and Tsunami</title>
+    <title>idai-image</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 
@@ -32,7 +32,8 @@
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
 	.imagepopup{
-		width: 350px;
+		width: 750px;
+		height:auto;
 	}
 	</style>
 
@@ -96,23 +97,6 @@
 			OpenStreetMap_Mapnik.addTo(map); 
 
 			function drawboundaries(){
-				d3.json('moz_adm3.geojson',function(jso){	
-	    			// var statesData = jso;
-	    			// get color depending on population density value
-					function style(feature) {
-						return {
-							weight: 2,
-							opacity: 1,
-							color: 'blue',
-							fillColor: 'red',
-							className: 'countriesboundaries'
-						};
-					}
-					var geojson;
-					geojson = L.geoJson(jso, {
-						style: style,
-					}).addTo(map);
-	    		})
 	    		d3.json('data/point_pics.geojson',function(data){
 	    			data.features.forEach(function(d,i){
 	    				var circle = L.marker([d.geometry.coordinates[1],d.geometry.coordinates[0]],{
@@ -145,48 +129,7 @@
 					onEachFeature: onEachFeature
 				}).addTo(map);
 
-				map.attributionControl.addAttribution('Impact data &copy; Compile by BNPB');
-
-
-				var legend = L.control({position: 'bottomright'});
-
-				legend.onAdd = function (map) {
-
-					var div = L.DomUtil.create('div', 'info legend'),
-						grades = [500, 750, 1000, 5000, 10000	],
-						labels = [],
-						from, to;
-
-					for (var i = 0; i < grades.length; i++) {
-						from = grades[i];
-						to = grades[i + 1];
-
-						labels.push(
-							'<i style="background:' + getColor(from + 1) + '"></i> ' +
-							from + (to ? '&ndash;' + to : '+'));
-					}
-
-					div.innerHTML = labels.join('<br>');
-					return div;
-				};
-
-				legend.addTo(map);
 	    	}
-	  //   	}
-
-	    		// call the original data
-	  //   		// d3.csv('paluimpact.csv',function(data){
-		 //    	// 	//set the data called to variable thedata
-		 //    	// 	// console.log(data);
-		 //    		thedata = data;
-
-		    
-
-		    
-
-		    	//})	 
-
-			//});
 
 	    })
 	    	
