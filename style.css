@@ -25,8 +25,8 @@ h1,h2,h3,h4,h5{
  height: auto;
  background-size: contain;
 }
-.info{
- width: 400px;
+.leaflet-popup-content-wrapper{
+ width: 450px;
  height: auto;
 }
 #maincontainer{
