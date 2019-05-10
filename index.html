@@ -118,13 +118,14 @@
 			Esri_WorldImagery.addTo(map);
 
 			function drawboundaries(){
-	    		d3.json('data/point_pics.geojson',function(data){
-	    			data.features.forEach(function(d,i){
-	    				var circle = L.marker([d.geometry.coordinates[1],d.geometry.coordinates[0]],{
+	    		d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0_zjbQXRnNmBO8Tw1ixB5BlpWnSddHZhjZp-UcqDLKm8FydlSeJS2EyRZ7F81Mx-6m_yx4h6QuhIy/pub?output=csv',function(data){
+	    			data.forEach(function(d,i){
+	    				var circle = L.marker([d['latitude'],d['longitude']],{
 							className:'test'
 						}).addTo(map).bindPopup('<div class="imagepopup"></div>').on('click',function(){
-							$('.imagepopup').html(d.properties.description);
+							$('.imagepopup').html(d.description);
 						});
+
 	    			})
 	    		})
 			}  	
